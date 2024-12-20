@@ -15,12 +15,18 @@
 
 package project_networks;
 
-//
-// TODO auto-generated module
-//
 simple Node
 {
     gates:
         input in[2];
         output out;
+        
+     parameters:
+        int WS;        // Window size
+        double TO;      // Timeout duration
+        double PT;      // Packet Processing time
+        double TD;      // Transmission delay
+        double ED;      // Error delay time
+        double DD;      // Duplicate Delay
+        int LP;         // Probability of ACK loss
 }

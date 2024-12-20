@@ -24,18 +24,25 @@ using namespace std;
 class Node : public cSimpleModule
 {
     private :
-    int seqNumber;                 // Current sequence number
-    int expectedSeqNumber;         // Expected sequence number at the receiver
-    int windowSize;                // Sliding window size
-    int base;                      // Base sequence number of the sender window
-    std::queue<std::string> queue; // Queue to store payloads
-    cMessage *timer;               // Timer for retransmissions
-    vector<pair<string,string>> values; // <error, message> pair
-    int pointer = 0;            // to index the elements of the values vector
-    bool isSender = false;  // bool to check if the current node is a sender or a receiver
+    double timeout;                      // Time (in seconds) to wait for an acknowledgment before retransmitting packets
+    double packetProcessingTime;         // Time (in seconds) required for the receiver to process a packet
+    double transmissionDelay;            // Simulated time (in seconds) for a packet to travel from sender to receiver
+    double errorDelayTime;               // Additional delay (in seconds) introduced due to network errors (e.g., congestion)
+    double duplicationDelay;             // Delay (in seconds) added to simulate duplicate packets in the network
+    double probabilityOfAckLoss;         // Probability (0 to 1) that an acknowledgment (ACK) is lost during transmission
+
+    int seqNumber;                       // Current sequence number of the packet being sent by the sender
+    int expectedSeqNumber;               // The sequence number the receiver expects to receive next
+    int windowSize;                      // The maximum number of packets the sender can send without waiting for an acknowledgment
+    int base;                            // The sequence number of the oldest unacknowledged packet (start of the sender's sliding window)
+
+    queue<string> queue;                 // Queue to store payloads (messages) that the sender needs to transmit
+    vector<pair<string, string>> values; // A vector of <error type, message> pairs to simulate errors in specific packets
+    int pointer = 0;                     // Index for iterating through the `values` vector, used for error simulation
+    bool isSender = false;               // Boolean flag indicating whether this node is acting as a sender (true) or receiver (false)
 
   protected:
-    virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2)
+    virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2);
     virtual int calcParityBit(int seq_number, string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;

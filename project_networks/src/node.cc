@@ -197,6 +197,14 @@ void Node ::readFile()
 void Node::initialize()
 {
     readFile();
+
+    windowSize = par("WS").intValue();
+    timeout = par("TO").doubleValue();
+    packetProcessingTime = par("PT").doubleValue();
+    transmissionDelay = par("TD").doubleValue();
+    errorDelayTime = par("ED").doubleValue();
+    duplicationDelay = par("DD").doubleValue();
+    probabilityOfAckLoss = par("LP").intValue();
 }
 
 void Node::handleMessage(cMessage *msg)
@@ -216,8 +224,6 @@ void Node::handleMessage(cMessage *msg)
     // sender handling
     if (isSender)
     {
-        cout<<"inside sender"<<endl;
-        // TODO - Generated method body
         string error_code, payload;
         if (pointer < values.size())
         {
@@ -225,35 +231,10 @@ void Node::handleMessage(cMessage *msg)
             payload = values[pointer].second;
             pointer++;
         }
-        // create a new custom message
-        Custom_message_Base * mmsg = new Custom_message_Base();
 
-        // set the header with the sequence number
-        int seq_number = pointer - 1; // to be initialized properly later
-        mmsg->setM_Header(seq_number);
-
-        // apply framing to the payload and set it
-        string framed = frame(payload);
-        cout<<"framed payload = "<<framed<<endl;
-        mmsg->setM_Payload(framed.c_str());
-
-        // calculate the parity bit
-        int parity = calcParityBit(seq_number, framed);
-
-        // add parity to the message trailer
-        mmsg->setM_Trailer(parity);
-
-        // set the message type to data (because this is the initialization)
-        mmsg-> setM_Type(2);
-
-        // set the ack number
-        mmsg-> setM_Ack_Num(15); // needs to be properly set
-
-        cout<<"the sender sent message with a header : "<<mmsg->getM_Header()<<" ,payload : "<<mmsg->getM_Payload()<<
-           " ,trailer : "<<mmsg->getM_Trailer()<<", and type : "<<mmsg->getM_Type()<<endl;
-
-       send(mmsg,"out");
+        handleSend(payload, pointer - 1, error_code);
     }
+
     //receiver handling
     else
     {
@@ -281,8 +262,15 @@ void Node::handleMessage(cMessage *msg)
 
 void Node::handleSend(string payload, int seq_number, string errorCode)
 {
-    double currentTime = 0.0; //TODO: replace with current time (simTime + i/o file)
-    int nodeID = 0; //TODO: replace with correct node ID
+    double currentTime = SimTime(); //current time
+
+    //  set node id
+    const char *nodeName = getName();
+    int nodeID = -1;
+    if (strcmp(nodeName, "node2") == 0)
+        nodeID = 1;
+    else
+        nodeID = 0;
 
     // Initialize logged message for log 1
     string loggedMessage = format("At time [{}], Node[{}], Introducing channel error with code {}, ",
@@ -291,9 +279,8 @@ void Node::handleSend(string payload, int seq_number, string errorCode)
     // TODO: LOG MESSAGE TO OUTPUT FILE
 
     // Intialize Delay with processing time delay
-    int delay = 0.5; // TODO: MOVE TO INI
-    currentTime +=0.5;
-
+    double delay = packetProcessingTime;
+    currentTime +=delay;
 
     // create a new custom message
     Custom_message_Base * msg = new Custom_message_Base();
@@ -318,7 +305,7 @@ void Node::handleSend(string payload, int seq_number, string errorCode)
     loggedMessage = format("At time [{}], Node[{}] sent frame with seq_num=[{}] and payload=[{}] and trailer=[{}],",
     currentTime, nodeID, seq_number, framedPayload, (bitset<8>(parity)).to_string());
 
-    int dup_delay = 0.1; //TODO: MOVE TO INI (duplicate delay)
+    double dup_delay = duplicationDelay;
 
     // In case of duplicates
     string loggedMessage2 = format("At time [{}], Node[{}] sent frame with seq_num=[{}] and payload=[{}] and trailer=[{}],",
@@ -326,7 +313,7 @@ void Node::handleSend(string payload, int seq_number, string errorCode)
 
     // TODO: log loggedMessage 1
 
-    delay+=1; // TODO: MOVE TO INI (transmission/channel delay)
+    delay+=transmissionDelay; // TODO: MOVE TO INI (transmission/channel delay)
 
     // set the message type to data (because this is the initialization)
     msg-> setM_Type(2);
