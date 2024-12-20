@@ -28,6 +28,7 @@ class Coordinator : public cSimpleModule
   protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    void readFile(int &nodeId, double &startTime);
 };
 
 #endif
