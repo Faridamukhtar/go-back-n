@@ -26,6 +26,14 @@ using namespace std;
  */
 class Node : public cSimpleModule
 {
+  private:
+    int seqNumber;                 // Current sequence number
+    int expectedSeqNumber;         // Expected sequence number at the receiver
+    int windowSize;                // Sliding window size
+    int base;                      // Base sequence number of the sender window
+    std::queue<std::string> queue; // Queue to store payloads
+    cMessage *timer;               // Timer for retransmissions
+
   protected:
     virtual string frame(string payload);
     virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2)
@@ -33,6 +41,9 @@ class Node : public cSimpleModule
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     virtual void handleSend();
+    void handleAck(int ackNumber);
+    void handleTimeout();
+
 };
 
 #endif

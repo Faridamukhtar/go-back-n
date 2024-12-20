@@ -116,9 +116,8 @@ int Node::processError(string errorCode, string& framedPayload, string &logger, 
     }
 }
 
-void Node::handleSend(string payload, int seq_number)
+void Node::handleSend(string payload, int seq_number, string errorCode)
 {
-    string errorCode = "1001"; //TODO: replace with error code from file
     double currentTime = 0.0; //TODO: replace with current time (simTime + i/o file)
     int nodeID = 0; //TODO: replace with correct node ID
 
@@ -200,15 +199,37 @@ int Node::calcParityBit(int header, string payload)
     return (int)(m.to_ulong());
 }
 
-void Node::initialize()
-{
-    // TODO - Generated method body
+void Node::initialize() {
 
-
-   send(msg,"out");
 }
 
 void Node::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
 }
+
+void Node::initializeSender() {
+    seqNumber = 0;
+    expectedSeqNumber = 0;
+    windowSize = par("windowSize").intValue();  // Set from .ini file
+    base = 0;
+    timer = nullptr;
+    string errorCode = "1001"; //TODO: from file
+
+    // Start sending
+    if (!queue.empty()) {
+        handleSend(queue.front(), seqNumber);
+    }
+}
+
+// start i at 0
+// haneb3at n messages ( 3ala 7asab el windowSize) starting men i le el max(len(vector beta3 el messages, i+window size)
+// hayerga3ly acks
+// ha keep track of max ack within el time frame el ana feeh
+// le7ad el timeout hafdal mestaneya akbar rakam ack haygeely
+// law akbar ack <= (window size -1) sa3etha ha resend packets from akbar packet le window size -1
+// lama el ack el sa7 yewsal -> sa3etha ha increment el i to window size
+// repeat
+
+
+
