@@ -26,11 +26,17 @@ using namespace std;
  */
 class Node : public cSimpleModule
 {
+  private :
+    vector<pair<string,string>> values;
+    int pointer = 0;            // to index the elements of the values vector
+    bool isSender = false;  // bool to check if the current node is a sender or a receiver
   protected:
-    virtual string frame(string payload);
-    virtual int calcParityBit(int seq_number, string payload);
+    string frame(string payload);
+    string deframe(string frame);
+    int calcParityBit(int seq_number, string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    void readFile();
 };
 
 #endif

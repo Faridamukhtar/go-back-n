@@ -61,9 +61,9 @@ class Custom_message;
 class Custom_message_Base : public ::omnetpp::cPacket
 {
   protected:
-    int M_Header = 0;
+    char M_Header = 0;
     omnetpp::opp_string M_Payload;
-    int M_Trailer = 0;
+    char M_Trailer = 0;
     int M_Type = 0;
     int M_Ack_Num = 0;
 

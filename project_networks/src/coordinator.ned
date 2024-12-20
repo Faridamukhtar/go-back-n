@@ -21,6 +21,5 @@ package project_networks;
 simple Coordinator
 {
     gates:
-        input in;
-        output out;
+        output out[2];
 }
