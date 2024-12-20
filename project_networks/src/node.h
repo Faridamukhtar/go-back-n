@@ -28,9 +28,11 @@ class Node : public cSimpleModule
 {
   protected:
     virtual string frame(string payload);
+    virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2)
     virtual int calcParityBit(int seq_number, string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    virtual void handleSend();
 };
 
 #endif
