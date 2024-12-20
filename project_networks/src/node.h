@@ -21,21 +21,29 @@
 using namespace omnetpp;
 using namespace std;
 
-/**
- * TODO - Generated class
- */
 class Node : public cSimpleModule
 {
-  private :
-    vector<pair<string,string>> values;
+    private :
+    int seqNumber;                 // Current sequence number
+    int expectedSeqNumber;         // Expected sequence number at the receiver
+    int windowSize;                // Sliding window size
+    int base;                      // Base sequence number of the sender window
+    std::queue<std::string> queue; // Queue to store payloads
+    cMessage *timer;               // Timer for retransmissions
+    vector<pair<string,string>> values; // <error, message> pair
     int pointer = 0;            // to index the elements of the values vector
     bool isSender = false;  // bool to check if the current node is a sender or a receiver
+
   protected:
-    string frame(string payload);
-    string deframe(string frame);
-    int calcParityBit(int seq_number, string payload);
+    virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2)
+    virtual int calcParityBit(int seq_number, string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    virtual void handleSend();
+    void handleAck(int ackNumber);
+    void handleTimeout();
+    string frame(string payload);
+    string deframe(string frame);
     void readFile();
 };
 
