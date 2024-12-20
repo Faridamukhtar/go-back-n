@@ -61,9 +61,9 @@ class Custom_message;
 class Custom_message_Base : public ::omnetpp::cPacket
 {
   protected:
-    char M_Header = 0;
+    int M_Header = 0;
     omnetpp::opp_string M_Payload;
-    char M_Trailer = 0;
+    int M_Trailer = 0;
     int M_Type = 0;
     int M_Ack_Num = 0;
 
@@ -86,14 +86,14 @@ class Custom_message_Base : public ::omnetpp::cPacket
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
 
-    virtual char getM_Header() const;
-    virtual void setM_Header(char M_Header);
+    virtual int getM_Header() const;
+    virtual void setM_Header(int M_Header);
 
     virtual const char * getM_Payload() const;
     virtual void setM_Payload(const char * M_Payload);
 
-    virtual char getM_Trailer() const;
-    virtual void setM_Trailer(char M_Trailer);
+    virtual int getM_Trailer() const;
+    virtual void setM_Trailer(int M_Trailer);
 
     virtual int getM_Type() const;
     virtual void setM_Type(int M_Type);

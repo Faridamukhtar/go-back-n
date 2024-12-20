@@ -200,12 +200,12 @@ void Custom_message_Base::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->M_Ack_Num);
 }
 
-char Custom_message_Base::getM_Header() const
+int Custom_message_Base::getM_Header() const
 {
     return this->M_Header;
 }
 
-void Custom_message_Base::setM_Header(char M_Header)
+void Custom_message_Base::setM_Header(int M_Header)
 {
     this->M_Header = M_Header;
 }
@@ -220,12 +220,12 @@ void Custom_message_Base::setM_Payload(const char * M_Payload)
     this->M_Payload = M_Payload;
 }
 
-char Custom_message_Base::getM_Trailer() const
+int Custom_message_Base::getM_Trailer() const
 {
     return this->M_Trailer;
 }
 
-void Custom_message_Base::setM_Trailer(char M_Trailer)
+void Custom_message_Base::setM_Trailer(int M_Trailer)
 {
     this->M_Trailer = M_Trailer;
 }
@@ -387,9 +387,9 @@ const char *Custom_messageDescriptor::getFieldTypeString(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
-        "char",    // FIELD_M_Header
+        "int",    // FIELD_M_Header
         "string",    // FIELD_M_Payload
-        "char",    // FIELD_M_Trailer
+        "int",    // FIELD_M_Trailer
         "int",    // FIELD_M_Type
         "int",    // FIELD_M_Ack_Num
     };
@@ -537,9 +537,9 @@ void Custom_messageDescriptor::setFieldValue(omnetpp::any_ptr object, int field,
     }
     Custom_message_Base *pp = omnetpp::fromAnyPtr<Custom_message_Base>(object); (void)pp;
     switch (field) {
-        case FIELD_M_Header: pp->setM_Header(omnetpp::checked_int_cast<char>(value.intValue())); break;
+        case FIELD_M_Header: pp->setM_Header(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_M_Payload: pp->setM_Payload(value.stringValue()); break;
-        case FIELD_M_Trailer: pp->setM_Trailer(omnetpp::checked_int_cast<char>(value.intValue())); break;
+        case FIELD_M_Trailer: pp->setM_Trailer(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_M_Type: pp->setM_Type(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_M_Ack_Num: pp->setM_Ack_Num(omnetpp::checked_int_cast<int>(value.intValue())); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'Custom_message_Base'", field);

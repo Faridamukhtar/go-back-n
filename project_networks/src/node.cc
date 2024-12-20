@@ -16,6 +16,7 @@
 #include "node.h"
 #include<bitset>
 #include<vector>
+#include "custom_message_m.h"
 using namespace std;
 
 Define_Module(Node);
@@ -36,7 +37,7 @@ string Node:: frame(string payload)
 
 int Node::calcParityBit(int header, string payload)
 {
-    bitset<8> m(seq_number);
+    bitset<8> m(header);
     for(int i = 0; i < payload.size(); i++)
     {
          m = (m ^ bitset<8>(payload[i]));
@@ -62,7 +63,7 @@ void Node::initialize()
     // apply framing to the payload and set it
     string framed = frame(payload);
     cout<<"framed payload = "<<framed<<endl;
-    msg->setM_Payload(framed);
+    msg->setM_Payload(framed.c_str());
 
     // calculate the parity bit
     int parity = calcParityBit(seq_number, framed);
