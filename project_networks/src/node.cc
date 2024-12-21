@@ -145,20 +145,6 @@ int Node::calcParityBit(int header, string payload)
     return (int)(m.to_ulong());
 }
 
-void Node::initializeSender() {
-    seqNumber = 0;
-    expectedSeqNumber = 0;
-    windowSize = par("windowSize").intValue();  // Set from .ini file
-    base = 0;
-    timer = nullptr;
-    string errorCode = "1001"; //TODO: from file
-
-    // Start sending
-    if (!queue.empty()) {
-        handleSend(queue.front(), seqNumber);
-    }
-}
-
 // start i at 0
 // haneb3at n messages ( 3ala 7asab el windowSize) starting men i le el max(len(vector beta3 el messages, i+window size)
 // hayerga3ly acks
