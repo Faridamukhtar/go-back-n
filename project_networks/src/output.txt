@@ -140,3 +140,27 @@ Original Payload ta
 At time 39.500000, Sending ACK with number 0 , loss [No ].
 Original Payload tb
 At time 40.000000, Sending ACK with number 1 , loss [No ].
+Original Payload tc
+At time 40.500000, Sending ACK with number 2 , loss [No ].
+At time 40.000000, Node0, Introducing channel error with code 0011, 
+At time 40.500000, Node0 sent frame with seq_num=3 and payload=$fa$ and trailer=00000100,Modified [-1] ,Lost [No] ,Duplicate [1] ,Delay [4.000000].
+At time 40.600000, Node0 sent frame with seq_num=3 and payload=$fa$ and trailer=00000100,Modified [-1] ,Lost [No] ,Duplicate [2] ,Delay [4.000000].
+At time 40.500000, Node0, Introducing channel error with code 1010, 
+At time 41.000000, Node0 sent frame with seq_num=4 and payload=$gb$ and trailer=00000000,Modified [9] ,Lost [No] ,Duplicate [1] ,Delay [0] ,
+At time 41.100000, Node0 sent frame with seq_num=4 and payload=$gb$ and trailer=00000000,Modified [9] ,Lost [No] ,Duplicate [2] ,Delay [0].
+At time 41.000000, Node0, Introducing channel error with code 1100, 
+At time 41.500000, Node0 sent frame with seq_num=0 and payload=$gc$ and trailer=00000101,Modified [9] ,Lost [Yes] ,Duplicate [0] ,Delay [0] ,
+Original Payload fa
+At time 46.000000, Sending ACK with number 3 , loss [No ].
+Time out event at time 51.000000, at Node0 for frame with seq_num=4, 
+At time 51.000000, Node0, Introducing channel error with code 0000, 
+At time 51.500000, Node0 sent frame with seq_num=4 and payload=$fb$ and trailer=00000000,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 51.500000, Node0, Introducing channel error with code 1100, 
+At time 52.000000, Node0 sent frame with seq_num=0 and payload=$gc$ and trailer=00000101,Modified [9] ,Lost [Yes] ,Duplicate [0] ,Delay [0] ,
+Original Payload fb
+At time 53.000000, Sending ACK with number 4 , loss [No ].
+Time out event at time 62.000000, at Node0 for frame with seq_num=0, 
+At time 62.000000, Node0, Introducing channel error with code 0000, 
+At time 62.500000, Node0 sent frame with seq_num=0 and payload=$fc$ and trailer=00000101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+Original Payload fc
+At time 64.000000, Sending ACK with number 0 , loss [No ].
