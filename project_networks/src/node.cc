@@ -129,7 +129,9 @@ int Node::calcParityBit(int header, string payload) {
 
 void Node::GoBackN(int startIndex, int endIndex) {
     double delay = 0;
-    for (int i = startIndex; i < endIndex; i++)
+    int size = values.size();
+
+    for (int i = startIndex; i < min(endIndex, size) ; i++)
     {
         Custom_message_Base *timerMessage = new Custom_message_Base("timeOut");
 
@@ -143,6 +145,7 @@ void Node::GoBackN(int startIndex, int endIndex) {
         handleSend(values[i].second, nextSeqNumber, values[i].first, delay);
         nextSeqNumber = (nextSeqNumber+1)%(1+windowSize);
         delay+= packetProcessingTime;
+        nextSentFrame++;
     }
 
 }
@@ -192,6 +195,7 @@ void Node::initialize() {
     lastReceived = -1;
     isSender = false;
     pointer = 0;
+    nextSentFrame = 0;
 }
 
 void Node::cancelAllTimeouts() {
@@ -249,10 +253,12 @@ void Node::handleMessage(cMessage *msg) {
             EV << loggedMessage <<endl;
             writeFile(loggedMessage);
             nextSeqNumber = seqNumber;
+            nextSentFrame = trail;
             GoBackN(trail, trail+windowSize);
 
             return;
         }
+
         int size = values.size();
         int currentAck = mmsg->getM_Ack_Num();
         int frameType = mmsg->getM_Type();
@@ -272,7 +278,6 @@ void Node::handleMessage(cMessage *msg) {
             }
 
             GoBackN(nextSentFrame, nextSentFrame+1);
-            nextSentFrame++;
         }
     }
     //receiver handling
@@ -375,7 +380,7 @@ void Node::handleReceive(cMessage *msg) {
 
     int seq_number = mmsg->getM_Header();
 
-    if (lastReceived !=seq_number-1)
+    if (((lastReceived+1)%(windowSize+1)) !=seq_number)
         return;
 
     sentMsg->setM_Header(seq_number);
@@ -415,12 +420,7 @@ void Node::handleReceive(cMessage *msg) {
         sendDelayed(sentMsg, SimTime(packetProcessingTime+transmissionDelay),"out");
         AckLoss = "No";
         if (sentMsg->getM_Type()==1)
-        {
-            lastReceived++;
-            if (lastReceived == windowSize-1)
-                lastReceived = -1;
-
-        }
+            lastReceived = (lastReceived+1)%(windowSize+1);
     }
 
     writeFile(to_string(simTime().dbl()));
