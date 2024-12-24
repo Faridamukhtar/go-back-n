@@ -140,7 +140,7 @@ void Node::GoBackN(int startIndex, int endIndex) {
 
         timeoutQueue.push(timerMessage);
 
-        scheduleAt(SimTime(simTime().dbl() + timeout + delay), timerMessage);
+        scheduleAt(SimTime(simTime().dbl() + timeout + delay + packetProcessingTime), timerMessage);
 
         handleSend(values[i].second, nextSeqNumber, values[i].first, delay);
         nextSeqNumber = (nextSeqNumber+1)%(1+windowSize);
@@ -196,6 +196,7 @@ void Node::initialize() {
     isSender = false;
     pointer = 0;
     nextSentFrame = 0;
+    nextSeqNumber = 0;
 }
 
 void Node::cancelAllTimeouts() {
@@ -410,8 +411,8 @@ void Node::handleReceive(cMessage *msg) {
 
     string AckLoss = "";
 
-    int rand = uniform(0,1)*100;
-    if (rand<= probabilityOfAckLoss)
+    double rand = uniform(0,1)*100;
+    if (rand <= probabilityOfAckLoss)
     {
         AckLoss = "Yes";
     }
@@ -423,7 +424,6 @@ void Node::handleReceive(cMessage *msg) {
             lastReceived = (lastReceived+1)%(windowSize+1);
     }
 
-    writeFile(to_string(simTime().dbl()));
     string loggedMessage = "At time " + to_string(simTime().dbl()+packetProcessingTime) +
                            ", Sending " + AckNack +
                            " with number " + to_string(seq_number) +
