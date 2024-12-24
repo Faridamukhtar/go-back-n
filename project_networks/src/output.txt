@@ -559,3 +559,45 @@ At time 82.000000, Node0, Introducing channel error with code 0000,
 At time 82.500000, Node0 sent frame with seq_num=0 and payload=$fc$ and trailer=00000101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
 83.500000
 At time 84.000000, Sending ACK with number 0 , loss [No ].
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=0 and payload=$aaaa$ and trailer=00000000,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=1 and payload=$b/$bbb$ and trailer=00001010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=2 and payload=$ccc/$/$c$ and trailer=00000010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=3 and payload=$d///$ddd$ and trailer=00001000,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+1.500000
+At time 2.000000, Sending ACK with number 0 , loss [No ].
+1.500000
+At time 2.000000, Sending ACK with number 1 , loss [No ].
+1.500000
+At time 2.000000, Sending ACK with number 2 , loss [No ].
+1.500000
+At time 2.000000, Sending ACK with number 3 , loss [No ].
+At time 3.000000, Node0, Introducing channel error with code 0000, 
+At time 3.500000, Node0 sent frame with seq_num=4 and payload=$aaaa$ and trailer=00000100,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 3.000000, Node0, Introducing channel error with code 0000, 
+At time 3.500000, Node0 sent frame with seq_num=0 and payload=$b/$bbb$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 3.000000, Node0, Introducing channel error with code 0000, 
+At time 3.500000, Node0 sent frame with seq_num=1 and payload=$ccc/$/$c$ and trailer=00000001,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=0 and payload=$aaaa$ and trailer=00000000,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=1 and payload=$b/$bbb$ and trailer=00001010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=2 and payload=$ccc/$/$c$ and trailer=00000010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 0.000000, Node0, Introducing channel error with code 0000, 
+At time 0.500000, Node0 sent frame with seq_num=3 and payload=$d///$ddd$ and trailer=00001000,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+1.500000
+At time 2.000000, Sending ACK with number 0 , loss [No ].
+1.500000
+At time 2.000000, Sending ACK with number 1 , loss [No ].
+1.500000
+At time 2.000000, Sending ACK with number 2 , loss [No ].
+1.500000
+At time 2.000000, Sending ACK with number 3 , loss [No ].
+At time 3.000000, Node0, Introducing channel error with code 0000, 
+At time 3.500000, Node0 sent frame with seq_num=4 and payload=$aaaa$ and trailer=00000100,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 3.000000, Node0, Introducing channel error with code 0000, 
+At time 3.500000, Node0 sent frame with seq_num=0 and payload=$b/$bbb$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,

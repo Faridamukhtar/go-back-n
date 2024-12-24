@@ -128,7 +128,7 @@ int Node::calcParityBit(int header, string payload) {
 }
 
 void Node::GoBackN(int startIndex, int endIndex) {
-    int delay = 0;
+    double delay = 0;
     for (int i = startIndex; i < endIndex; i++)
     {
         Custom_message_Base *timerMessage = new Custom_message_Base("timeOut");
@@ -141,7 +141,7 @@ void Node::GoBackN(int startIndex, int endIndex) {
         scheduleAt(SimTime(simTime().dbl() + timeout + delay), timerMessage);
 
         handleSend(values[i].second, nextSeqNumber, values[i].first, delay);
-        nextSeqNumber= (nextSeqNumber+1)%(1+windowSize);
+        nextSeqNumber = (nextSeqNumber+1)%(1+windowSize);
         delay+= packetProcessingTime;
     }
 
@@ -205,20 +205,8 @@ void Node::cancelAllTimeouts() {
     }
 }
 
-void Node::cancelTimeoutsUpToSeqNumber(int seqNumber) {
-    while (!timeoutQueue.empty()) {
-        Custom_message_Base* msg = timeoutQueue.front(); // Get the front message
-        timeoutQueue.pop(); // Remove it from the queue
-
-        if (msg && msg->getM_Header() <= seqNumber) {
-            // Cancel the event if scheduled and sequence number matches
-            if (msg->isScheduled()) {
-                cancelEvent(msg);
-            }
-        } else {
-            break; // all remaining seq numbers will be greater than the threshold sequence number
-        }
-    }
+bool between(int a, int b, int c) {
+    return ((b <= a && a < c) || (c < b && (a >= b || a < c)));
 }
 
 void Node::handleMessage(cMessage *msg) {
@@ -268,23 +256,23 @@ void Node::handleMessage(cMessage *msg) {
         int size = values.size();
         int currentAck = mmsg->getM_Ack_Num();
         int frameType = mmsg->getM_Type();
-        if (currentAck >= expectedSeqNumber and frameType == 1)
+
+        while (frameType == 1 && between(expectedSeqNumber, currentAck, nextSeqNumber))
         {
-            expectedSeqNumber = (currentAck + 1)%(windowSize+1);
+            expectedSeqNumber = (expectedSeqNumber + 1)%(windowSize+1);
 
-            cancelTimeoutsUpToSeqNumber(currentAck);
+            // Cancel Timer
+            if (!timeoutQueue.empty())
+            {
+                Custom_message_Base* msg = timeoutQueue.front(); // Get the front message
+                timeoutQueue.pop(); // Remove it from the queue
 
-            if (expectedSeqNumber == currentWindowSize)
-            {
-                maxSeqBunch += currentWindowSize;
-                if (maxSeqBunch == size)
-                    return;
-                GoBackN(maxSeqBunch, 0);
+                if (msg->isScheduled())
+                    cancelEvent(msg);
             }
-            else
-            {
-                GoBackN(lastSent+1, 0);
-            }
+
+            GoBackN(nextSentFrame, nextSentFrame+1);
+            nextSentFrame++;
         }
     }
     //receiver handling

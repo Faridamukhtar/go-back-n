@@ -38,7 +38,7 @@ class Node : public cSimpleModule
     int expectedSeqNumber;               // The sequence number the receiver expects to receive next
     int windowSize;                      // The maximum number of packets the sender can send without waiting for an acknowledgment
     int nextSeqNumber;                   // The next seq number
-    int base;                            // The sequence number of the oldest unacknowledged packet (start of the sender's sliding window)
+    int nextSentFrame;                   // The next frame number
     int lastReceived;
 
     vector<pair<string, string>> values; // A vector of <error type, message> pairs to simulate errors in specific packets
