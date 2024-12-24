@@ -52,7 +52,7 @@ class Node : public cSimpleModule
     virtual int calcParityBit(int seq_number, string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
-    virtual void handleSend(string payload, int seq_number, string errorCode);
+    virtual void handleSend(string payload, int seq_number, string errorCode, double delay);
     void GoBackN(int maxSeqBunch, int seqN);
     void handleAck(int ackNumber);
     void handleTimeout();

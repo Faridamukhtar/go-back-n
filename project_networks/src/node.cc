@@ -131,6 +131,7 @@ void Node::GoBackN(int maxSeqBunch, int seqN) {
     expectedSeqNumber = seqN;
     int arraySize = values.size();
     currentWindowSize = min(windowSize, arraySize - maxSeqBunch);
+    double delay = 0;
 
     for (int i = seqN; i < currentWindowSize; i++)
     {
@@ -139,10 +140,11 @@ void Node::GoBackN(int maxSeqBunch, int seqN) {
 
         timeoutQueue.push(timerMessage);
 
-        scheduleAt(SimTime(simTime().dbl() + timeout), timerMessage);
+        scheduleAt(SimTime(simTime().dbl() + timeout + delay), timerMessage);
 
-        handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].first);
+        handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].first, delay);
         values[i + maxSeqBunch] = {"0000", values[i + maxSeqBunch].second};
+        delay+= packetProcessingTime;
     }
 
 }
@@ -227,8 +229,10 @@ void Node::handleMessage(cMessage *msg) {
     cGate *arrivalGate = msg->getArrivalGate();
 
     // You can access the gate's index to check which gate it arrived at
-    int gateIndex = arrivalGate->getIndex();
-    // received a message from the coordinator --> sender
+    int gateIndex = -1;
+    if (arrivalGate)
+        gateIndex = arrivalGate->getIndex();
+
     if (gateIndex == 1)
     {
         isSender = true;
@@ -281,7 +285,7 @@ void Node::handleMessage(cMessage *msg) {
 
 }
 
-void Node::handleSend(string payload, int seq_number, string errorCode) {
+void Node::handleSend(string payload, int seq_number, string errorCode, double currentDelay) {
     double currentTime = simTime().dbl(); //current time
 
     // Initialize logged message for log 1
@@ -292,7 +296,7 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
     writeFile(loggedMessage);
 
     // Intialize Delay with processing time delay
-    double delay = packetProcessingTime;
+    double delay = packetProcessingTime+currentDelay;
     currentTime += delay;
 
     // create a new custom message
@@ -409,18 +413,19 @@ void Node::handleReceive(cMessage *msg) {
     }
     else
     {
-        send(sentMsg, "out");
+        sendDelayed(sentMsg, SimTime(packetProcessingTime+transmissionDelay),"out");
         AckLoss = "No";
         if (sentMsg->getM_Type()==1)
         {
             lastReceived++;
-            if (lastReceived == windowSize)
+            if (lastReceived == windowSize-1)
                 lastReceived = -1;
+
         }
     }
 
-
-    string loggedMessage = "At time " + to_string(simTime().dbl()) +
+    writeFile(to_string(simTime().dbl()));
+    string loggedMessage = "At time " + to_string(simTime().dbl()+packetProcessingTime) +
                            ", Sending " + AckNack +
                            " with number " + to_string(seq_number) +
                            " , loss [" + AckLoss + " ].";
