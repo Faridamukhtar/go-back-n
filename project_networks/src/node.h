@@ -48,7 +48,7 @@ class Node : public cSimpleModule
 
   protected:
     virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2, double &delay);
-    virtual int calcParityBit(int seq_number, string payload);
+    virtual int calcParityBit(string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     virtual void handleSend(string payload, int seq_number, string errorCode, double delay);

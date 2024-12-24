@@ -118,10 +118,13 @@ int Node::processError(string errorCode, string &framedPayload, string &logger,s
     return numberSent;
 }
 
-int Node::calcParityBit(int header, string payload) {
-    bitset<8> m(header);
+int Node::calcParityBit(string payload) {
+    if (payload.size()==0)
+        return 0;
+
+    bitset<8> m(payload[0]);
     int psize = payload.size();
-    for (int i = 0; i < psize; i++) {
+    for (int i = 1; i < psize; i++) {
         m = (m ^ bitset<8>(payload[i]));
     }
     return (int) (m.to_ulong());
@@ -310,7 +313,7 @@ void Node::handleSend(string payload, int seq_number, string errorCode, double c
     string framedPayload = frame(payload);
 
     // calculate the parity bit and add parity to the message trailer
-    int parity = calcParityBit(seq_number, framedPayload);
+    int parity = calcParityBit(framedPayload);
     msg->setM_Trailer(parity);
 
     // introduce error to Payload
@@ -346,7 +349,7 @@ void Node::handleSend(string payload, int seq_number, string errorCode, double c
     msg->setM_Payload(framedPayload.c_str());
 
     // set the Ack number
-    msg->setM_Ack_Num(15); // needs to be properly set
+    msg->setM_Ack_Num(15); // dummy Number (Not Needed)
 
     if (numberSent == 0)
         return;
@@ -390,7 +393,7 @@ void Node::handleReceive(cMessage *msg) {
 
     int parity = mmsg->getM_Trailer();
 
-    int par = calcParityBit(seq_number, frame);
+    int par = calcParityBit(frame);
 
     string AckNack = "";
 
@@ -409,8 +412,8 @@ void Node::handleReceive(cMessage *msg) {
 
     string AckLoss = "";
 
-    double rand = uniform(0,1)*100;
-    if (rand <= probabilityOfAckLoss)
+    double rand = uniform(0,100);
+    if (rand < probabilityOfAckLoss)
     {
         AckLoss = "Yes";
     }
