@@ -37,9 +37,8 @@ class Node : public cSimpleModule
     int seqNumber;                       // Current sequence number of the packet being sent by the sender
     int expectedSeqNumber;               // The sequence number the receiver expects to receive next
     int windowSize;                      // The maximum number of packets the sender can send without waiting for an acknowledgment
-    int currentWindowSize;               // The maximum number of packets the sender can send without waiting for an acknowledgment (HANDLES LAST ITERATION)
+    int nextSeqNumber;                   // The next seq number
     int base;                            // The sequence number of the oldest unacknowledged packet (start of the sender's sliding window)
-    int maxSeqBunch;                 // current sequence range (for example maxSeqBunch=0 means values from i = 0 -> i= windowSize -1)
     int lastReceived;
 
     vector<pair<string, string>> values; // A vector of <error type, message> pairs to simulate errors in specific packets
@@ -53,7 +52,7 @@ class Node : public cSimpleModule
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     virtual void handleSend(string payload, int seq_number, string errorCode, double delay);
-    void GoBackN(int maxSeqBunch, int seqN);
+    void GoBackN(int startIndex, int endIndex);
     void handleAck(int ackNumber);
     void handleTimeout();
     string frame(string payload);

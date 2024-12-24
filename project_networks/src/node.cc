@@ -127,23 +127,21 @@ int Node::calcParityBit(int header, string payload) {
     return (int) (m.to_ulong());
 }
 
-void Node::GoBackN(int maxSeqBunch, int seqN) {
-    expectedSeqNumber = seqN;
-    int arraySize = values.size();
-    currentWindowSize = min(windowSize, arraySize - maxSeqBunch);
-    double delay = 0;
-
-    for (int i = seqN; i < currentWindowSize; i++)
+void Node::GoBackN(int startIndex, int endIndex) {
+    int delay = 0;
+    for (int i = startIndex; i < endIndex; i++)
     {
         Custom_message_Base *timerMessage = new Custom_message_Base("timeOut");
-        timerMessage->setM_Header(i);
+
+        timerMessage->setM_Header(nextSeqNumber);
+        timerMessage->setM_Trailer(i);
 
         timeoutQueue.push(timerMessage);
 
         scheduleAt(SimTime(simTime().dbl() + timeout + delay), timerMessage);
 
-        handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].first, delay);
-        values[i + maxSeqBunch] = {"0000", values[i + maxSeqBunch].second};
+        handleSend(values[i].second, nextSeqNumber, values[i].first, delay);
+        nextSeqNumber= (nextSeqNumber+1)%(1+windowSize);
         delay+= packetProcessingTime;
     }
 
@@ -192,7 +190,6 @@ void Node::initialize() {
     duplicationDelay = par("DD").doubleValue();
     probabilityOfAckLoss = par("LP").intValue();
     lastReceived = -1;
-    maxSeqBunch = 0;
     isSender = false;
     pointer = 0;
 }
@@ -235,8 +232,9 @@ void Node::handleMessage(cMessage *msg) {
 
     if (gateIndex == 1)
     {
+        expectedSeqNumber = 0;
         isSender = true;
-        GoBackN(maxSeqBunch, 0);
+        GoBackN(0, windowSize);
         return;
     }
 
@@ -250,6 +248,10 @@ void Node::handleMessage(cMessage *msg) {
             if (mmsg->getM_Header()<expectedSeqNumber)
                 return;
 
+            int trail = mmsg->getM_Trailer();
+
+            values[trail] = {"0000", values[trail].second};
+
             cancelAllTimeouts();
 
             int seqNumber = mmsg->getM_Header();
@@ -258,8 +260,8 @@ void Node::handleMessage(cMessage *msg) {
                                    " for frame with seq_num=" + to_string(seqNumber) + ", ";
             EV << loggedMessage <<endl;
             writeFile(loggedMessage);
-
-            GoBackN(maxSeqBunch, expectedSeqNumber);
+            nextSeqNumber = seqNumber;
+            GoBackN(trail, trail+windowSize);
 
             return;
         }
@@ -268,13 +270,20 @@ void Node::handleMessage(cMessage *msg) {
         int frameType = mmsg->getM_Type();
         if (currentAck >= expectedSeqNumber and frameType == 1)
         {
-            expectedSeqNumber = currentAck + 1;
+            expectedSeqNumber = (currentAck + 1)%(windowSize+1);
+
             cancelTimeoutsUpToSeqNumber(currentAck);
-            if (expectedSeqNumber == currentWindowSize) {
+
+            if (expectedSeqNumber == currentWindowSize)
+            {
                 maxSeqBunch += currentWindowSize;
                 if (maxSeqBunch == size)
                     return;
                 GoBackN(maxSeqBunch, 0);
+            }
+            else
+            {
+                GoBackN(lastSent+1, 0);
             }
         }
     }
@@ -289,15 +298,17 @@ void Node::handleSend(string payload, int seq_number, string errorCode, double c
     double currentTime = simTime().dbl(); //current time
 
     // Initialize logged message for log 1
-    string loggedMessage = "At time " + to_string(currentTime) +
+    string loggedMessage = "At time " + to_string(currentTime+currentDelay) +
                            ", Node" + to_string(nodeID) +
                            ", Introducing channel error with code " + errorCode + ", ";
-    EV << loggedMessage <<endl;
-    writeFile(loggedMessage);
 
     // Intialize Delay with processing time delay
     double delay = packetProcessingTime+currentDelay;
     currentTime += delay;
+
+    EV << loggedMessage <<endl;
+    writeFile(loggedMessage);
+
 
     // create a new custom message
     Custom_message_Base *msg = new Custom_message_Base("sent");
