@@ -200,7 +200,6 @@ void Node::initialize() {
 }
 
 void Node::cancelAllTimeouts() {
-    int i=0;
     while (!timeoutQueue.empty() and i<windowSize) {
         Custom_message_Base* msg = timeoutQueue.front(); // Get the front message
         timeoutQueue.pop(); // Remove it from the queue
@@ -208,7 +207,6 @@ void Node::cancelAllTimeouts() {
         if (msg->isScheduled()) {
             cancelEvent(msg); // Cancel the scheduled event
         }
-        i++;
     }
 }
 
@@ -263,17 +261,13 @@ void Node::handleMessage(cMessage *msg) {
         int currentAck = mmsg->getM_Ack_Num();
         int frameType = mmsg->getM_Type();
 
-        while (frameType == 1 && between(expectedSeqNumber, currentAck, nextSeqNumber))
+        while (frameType == 1 && between(currentAck, expectedSeqNumber, nextSeqNumber))
         {
-            cout<<"EXPECTED "<<expectedSeqNumber<<endl;
-            cout<<"NEXT "<<nextSeqNumber<<endl;
             expectedSeqNumber = (expectedSeqNumber + 1)%(windowSize+1);
-            cout<<"RECEIVED "<< mmsg->getM_Ack_Num()<<endl;
             // Cancel Timer
             if (!timeoutQueue.empty())
             {
                 Custom_message_Base* mmmsg = timeoutQueue.front(); // Get the front message
-                cout<<"POPPED"<<mmmsg->getM_Header()<<endl;
                 timeoutQueue.pop();
                 if (mmmsg->isScheduled())
                     cancelEvent(mmmsg);
