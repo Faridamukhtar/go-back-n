@@ -139,7 +139,7 @@ void Node::GoBackN(int maxSeqBunch, int seqN) {
 
         timeoutQueue.push(timerMessage);
 
-        scheduleAt(SimTime(SimTime().dbl() + timeout), timerMessage);
+        scheduleAt(SimTime(simTime().dbl() + timeout), timerMessage);
 
         handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].first);
         values[i + maxSeqBunch] = {"0000", values[i + maxSeqBunch].second};
@@ -203,8 +203,6 @@ void Node::cancelAllTimeouts() {
         if (msg->isScheduled()) {
             cancelEvent(msg); // Cancel the scheduled event
         }
-
-        delete msg; // Free the memory if the message is no longer needed
     }
 }
 
@@ -218,7 +216,6 @@ void Node::cancelTimeoutsUpToSeqNumber(int seqNumber) {
             if (msg->isScheduled()) {
                 cancelEvent(msg);
             }
-            delete msg; // Delete the message
         } else {
             break; // all remaining seq numbers will be greater than the threshold sequence number
         }
@@ -231,8 +228,6 @@ void Node::handleMessage(cMessage *msg) {
 
     // You can access the gate's index to check which gate it arrived at
     int gateIndex = arrivalGate->getIndex();
-    cout<<SimTime().dbl();
-    cout<<"AAA";
     // received a message from the coordinator --> sender
     if (gateIndex == 1)
     {
@@ -240,18 +235,21 @@ void Node::handleMessage(cMessage *msg) {
         GoBackN(maxSeqBunch, 0);
         return;
     }
-    cout<<"AHAHAHHSSHSH";
 
     Custom_message_Base *mmsg = check_and_cast<Custom_message_Base*>(msg);
 
     // sender handling
-    if (isSender) {
-        if (strcmp(msg->getName(), "timeOut") == 0)
+    if (isSender)
+    {
+        if (strcmp(mmsg->getName(), "timeOut") == 0)
         {
+            if (mmsg->getM_Header()<expectedSeqNumber)
+                return;
+
             cancelAllTimeouts();
 
             int seqNumber = mmsg->getM_Header();
-            string loggedMessage = "Time out event at time " + to_string(SimTime().dbl()) +
+            string loggedMessage = "Time out event at time " + to_string(simTime().dbl()) +
                                    ", at Node" + to_string(nodeID) +
                                    " for frame with seq_num=" + to_string(seqNumber) + ", ";
             EV << loggedMessage <<endl;
@@ -261,20 +259,17 @@ void Node::handleMessage(cMessage *msg) {
 
             return;
         }
-
         int size = values.size();
         int currentAck = mmsg->getM_Ack_Num();
         int frameType = mmsg->getM_Type();
-
         if (currentAck >= expectedSeqNumber and frameType == 1)
         {
-            cancelTimeoutsUpToSeqNumber(currentAck);
             expectedSeqNumber = currentAck + 1;
+            cancelTimeoutsUpToSeqNumber(currentAck);
             if (expectedSeqNumber == currentWindowSize) {
                 maxSeqBunch += currentWindowSize;
                 if (maxSeqBunch == size)
                     return;
-
                 GoBackN(maxSeqBunch, 0);
             }
         }
@@ -283,10 +278,11 @@ void Node::handleMessage(cMessage *msg) {
     else {
         handleReceive(msg);
     }
+
 }
 
 void Node::handleSend(string payload, int seq_number, string errorCode) {
-    double currentTime = SimTime().dbl(); //current time
+    double currentTime = simTime().dbl(); //current time
 
     // Initialize logged message for log 1
     string loggedMessage = "At time " + to_string(currentTime) +
@@ -300,7 +296,7 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
     currentTime += delay;
 
     // create a new custom message
-    Custom_message_Base *msg = new Custom_message_Base();
+    Custom_message_Base *msg = new Custom_message_Base("sent");
 
     // set the header with the sequence number
     msg->setM_Header(seq_number);
@@ -372,11 +368,14 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
 
 void Node::handleReceive(cMessage *msg) {
     Custom_message_Base *mmsg = check_and_cast<Custom_message_Base*>(msg);
+    Custom_message_Base *sentMsg = new Custom_message_Base("ACK/NACK");
 
     int seq_number = mmsg->getM_Header();
 
     if (lastReceived !=seq_number-1)
         return;
+
+    sentMsg->setM_Header(seq_number);
 
     string frame = mmsg->getM_Payload();
 
@@ -384,22 +383,22 @@ void Node::handleReceive(cMessage *msg) {
 
     int parity = mmsg->getM_Trailer();
 
-    int par = calcParityBit(mmsg->getM_Header(), frame);
+    int par = calcParityBit(seq_number, frame);
 
     string AckNack = "";
 
     if (parity != par)
     {
-        mmsg->setM_Type(0);  // NACK
+        sentMsg->setM_Type(0);  // NACK
         AckNack = "NACK";
     }
     else
     {
-        mmsg->setM_Type(1);  // ACK
+        sentMsg->setM_Type(1);  // ACK
         AckNack = "ACK";
     }
 
-    mmsg->setM_Ack_Num(seq_number);
+    sentMsg->setM_Ack_Num(seq_number);
 
     string AckLoss = "";
 
@@ -410,9 +409,9 @@ void Node::handleReceive(cMessage *msg) {
     }
     else
     {
-        send(mmsg, "out");
+        send(sentMsg, "out");
         AckLoss = "No";
-        if (mmsg->getM_Type()==1)
+        if (sentMsg->getM_Type()==1)
         {
             lastReceived++;
             if (lastReceived == windowSize)
@@ -421,7 +420,7 @@ void Node::handleReceive(cMessage *msg) {
     }
 
 
-    string loggedMessage = "At time " + to_string(SimTime().dbl()) +
+    string loggedMessage = "At time " + to_string(simTime().dbl()) +
                            ", Sending " + AckNack +
                            " with number " + to_string(seq_number) +
                            " , loss [" + AckLoss + " ].";

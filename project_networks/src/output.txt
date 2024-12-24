@@ -1,39 +1,165 @@
-At time 0.000000, Node0, Introducing channel error with code 1010, 
-At time 0.500000, Node0 sent frame with seq_num=0 and payload=$@ flower, sometimes$ and trailer=00011010,Modified [9] ,Lost [No] ,Duplicate [1] ,Delay [0] ,
-At time 0.600000, Node0 sent frame with seq_num=0 and payload=$@ flower, sometimes$ and trailer=00011010,Modified [9] ,Lost [No] ,Duplicate [2] ,Delay [0].
-At time 0.000000, Node0, Introducing channel error with code 0000, 
-At time 0.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0100, 
-At time 0.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [Yes] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0000, 
-At time 0.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0001, 
-At time 0.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [4.000000].
-At time 0.000000, Sending NACK with number 0 , loss [No ].
-At time 0.000000, Sending NACK with number 0 , loss [No ].
-At time 0.000000, Node0, Introducing channel error with code 1010, 
-At time 0.500000, Node0 sent frame with seq_num=0 and payload=$@ flower, sometimes$ and trailer=00011010,Modified [9] ,Lost [No] ,Duplicate [1] ,Delay [0] ,
-At time 0.600000, Node0 sent frame with seq_num=0 and payload=$@ flower, sometimes$ and trailer=00011010,Modified [9] ,Lost [No] ,Duplicate [2] ,Delay [0].
-At time 0.000000, Node0, Introducing channel error with code 0000, 
-At time 0.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0100, 
-At time 0.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [Yes] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0000, 
-At time 0.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0001, 
-At time 0.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [4.000000].
-At time 0.000000, Sending NACK with number 0 , loss [No ].
-At time 0.000000, Sending NACK with number 0 , loss [No ].
-At time 0.000000, Node0, Introducing channel error with code 1010, 
-At time 0.500000, Node0 sent frame with seq_num=0 and payload=$@ flower, sometimes$ and trailer=00011010,Modified [9] ,Lost [No] ,Duplicate [1] ,Delay [0] ,
-At time 0.600000, Node0 sent frame with seq_num=0 and payload=$@ flower, sometimes$ and trailer=00011010,Modified [9] ,Lost [No] ,Duplicate [2] ,Delay [0].
-At time 0.000000, Node0, Introducing channel error with code 0000, 
-At time 0.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0100, 
-At time 0.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [Yes] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0000, 
-At time 0.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
-At time 0.000000, Node0, Introducing channel error with code 0001, 
-At time 0.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [4.000000].
-At time 0.000000, Sending NACK with number 0 , loss [No ].
-At time 0.000000, Sending NACK with number 0 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=0 and payload=$A flower, sometimes$ and trailer=00011010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=1 and payload=$known as a bloom or blossom in flowering plants$ and trailer=01101010,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=2 and payload=$is the reproductive/$ structure found also called// angiosperms/$).$ and trailer=00110101,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=3 and payload=$(plants of the division Magnoliophyta, is to facilitate reproduction,$ and trailer=00001011,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 1.000000, Node0, Introducing channel error with code 0000, 
+At time 1.500000, Node0 sent frame with seq_num=4 and payload=$The biological function of /$//a flower$ and trailer=00011110,Modified [-1] ,Lost [No] ,Duplicate [0] ,Delay [0] ,
+At time 2.500000, Sending ACK with number 0 , loss [No ].
+At time 2.500000, Sending ACK with number 1 , loss [No ].
+At time 2.500000, Sending ACK with number 2 , loss [No ].
+At time 2.500000, Sending ACK with number 3 , loss [No ].
+At time 2.500000, Sending ACK with number 4 , loss [No ].
