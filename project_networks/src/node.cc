@@ -13,12 +13,15 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "node.h"
+#include"node.h"
 #include<bitset>
 #include<vector>
-#include <fstream>
-#include <string>
-#include "custom_message_m.h"
+#include<fstream>
+#include<string>
+#include<iostream>
+
+#include"custom_message_m.h"
+
 using namespace std;
 
 Define_Module(Node);
@@ -26,7 +29,8 @@ Define_Module(Node);
 string Node::frame(string payload) {
     string s;
     s += '$';
-    for (int i = 0; i < payload.length(); i++) {
+    int psize = payload.size();
+    for (int i = 0; i < psize; i++) {
         if (payload[i] == '$' || payload[i] == '/')
             s += '/';
         s += payload[i];
@@ -37,7 +41,8 @@ string Node::frame(string payload) {
 
 string Node::deframe(string frame) {
     string payload;
-    for (int i = 1; i < frame.length() - 1; i++) {
+    int fsize = frame.size();
+    for (int i = 1; i <  fsize - 1; i++) {
         if (frame[i] == '/' && (frame[i + 1] == '/' || frame[i + 1] == '$')) {
             payload += frame[i + 1];
             i++;
@@ -48,17 +53,17 @@ string Node::deframe(string frame) {
 }
 
 // INITIALIZE LOGGERS WITH EMPTY STRINGS
-int Node::processError(string errorCode, string &framedPayload, string &logger,
-        string &logger2, int &delay) {
+int Node::processError(string errorCode, string &framedPayload, string &logger,string &logger2, double &delay)
+{
     int numberSent = 1; // number of packets sent [0 for loss, 2 for duplicates]
-    int errorDelay = errorDelayTime;
+    double errorDelay = errorDelayTime;
 
     // Modified
     if (errorCode[0] == '1') {
         // Modification Logic: Modify 9th bit (1st bit in second byte)
         bitset<8> char1 = bitset<8>(framedPayload[1]);
         char1[0] = not char1[0];
-        framedPayload[1] = char1.to_string();
+        framedPayload[1] = static_cast<char>(char1.to_ulong());
 
         // Log Modified Bit
         logger += "Modified [9] ,";
@@ -112,11 +117,13 @@ int Node::processError(string errorCode, string &framedPayload, string &logger,
             logger2 += "Delay [0].";
         }
     }
+    return numberSent;
 }
 
 int Node::calcParityBit(int header, string payload) {
     bitset<8> m(header);
-    for (int i = 0; i < payload.size(); i++) {
+    int psize = payload.size();
+    for (int i = 0; i < psize; i++) {
         m = (m ^ bitset<8>(payload[i]));
     }
     return (int) (m.to_ulong());
@@ -135,21 +142,23 @@ void Node::GoBackN(int maxSeqBunch, int seqN) {
 
         scheduleAt(simTime() + timeout, timerMessage);
 
-        handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].second);
+        handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].first);
     }
 
 }
 
-void Node::readFile() {
-    string inputFileName =
-            "D:/uni_courses/sem7/networks-1/go-back-N-DLL/project_networks/src/input0.txt";
+void Node::readFile(int nodeId) {
+    string inputFileName;
+    if (nodeId==0)
+        inputFileName ="../src/input0.txt";
+    else
+        inputFileName ="../src/input1.txt";
+
+
     std::ifstream file(inputFileName);
     if (!file.is_open()) {
-        cout << "Error: Could not open file " << inputFileName << endl;
         return;
     }
-
-    cout << "Reading data from file: " << inputFileName << endl;
 
     std::string line;
     string id, description;
@@ -157,15 +166,12 @@ void Node::readFile() {
         id = line.substr(0, 4);
         description = line.substr(5);
         values.push_back( { id, description });
-        cout << "id = " << id << " , description" << description << endl;
     }
 
     file.close();
 }
 
 void Node::initialize() {
-    readFile();
-
     //  set node id
     const char *nodeName = getName();
     nodeID = -1;
@@ -174,6 +180,8 @@ void Node::initialize() {
     else
         nodeID = 0;
 
+    readFile(nodeID);
+
     windowSize = par("WS").intValue();
     timeout = par("TO").doubleValue();
     packetProcessingTime = par("PT").doubleValue();
@@ -181,6 +189,8 @@ void Node::initialize() {
     errorDelayTime = par("ED").doubleValue();
     duplicationDelay = par("DD").doubleValue();
     probabilityOfAckLoss = par("LP").intValue();
+    lastReceived = -1;
+    maxSeqBunch = 0;
 }
 
 void Node::handleMessage(cMessage *msg) {
@@ -193,18 +203,24 @@ void Node::handleMessage(cMessage *msg) {
     // received a message from the coordinator --> sender
     if (gateIndex == 1 && isSender == false) {
         isSender = true;
+        GoBackN(maxSeqBunch, 0);
+        return;
     }
+
+    Custom_message_Base *mmsg = check_and_cast<Custom_message_Base*>(msg);
 
     // sender handling
     if (isSender) {
         if (strcmp(msg->getName(), "timeOut") == 0)
         {
-            if (msg->getM_Trailer() > maxSeqBunch and msg->getM_Header()>=expectedSeqNumber)
+            if (mmsg->getM_Trailer() > maxSeqBunch and mmsg->getM_Header()>=expectedSeqNumber)
             {
-                int seqNumber = getM_Header();
-                loggedMessage = format(" Time out event at time [{}], at Node[{}] for frame with seq_num=[{}], ",
-                        SimTime(), nodeID, seqNumber);
+                int seqNumber = mmsg->getM_Header();
+                string loggedMessage = "Time out event at time " + to_string(SimTime().dbl()) +
+                                       ", at Node" + to_string(nodeID) +
+                                       " for frame with seq_num=" + to_string(seqNumber) + ", ";
                 EV << loggedMessage <<endl;
+                writeFile(loggedMessage);
 
                 GoBackN(maxSeqBunch, expectedSeqNumber);
             }
@@ -213,8 +229,8 @@ void Node::handleMessage(cMessage *msg) {
         }
 
         int size = values.size();
-        int currentAck = msg->getM_Ack_Num();
-        int frameType = getM_Type();
+        int currentAck = mmsg->getM_Ack_Num();
+        int frameType = mmsg->getM_Type();
 
         if (currentAck >= expectedSeqNumber and frameType == 1) {
             expectedSeqNumber = currentAck + 1;
@@ -236,15 +252,14 @@ void Node::handleMessage(cMessage *msg) {
 }
 
 void Node::handleSend(string payload, int seq_number, string errorCode) {
-    double currentTime = SimTime(); //current time
+    double currentTime = SimTime().dbl(); //current time
 
     // Initialize logged message for log 1
-    string loggedMessage = format(
-            "At time [{}], Node[{}], Introducing channel error with code {}, ",
-            currentTime, nodeID, errorCode);
+    string loggedMessage = "At time " + to_string(currentTime) +
+                           ", Node" + to_string(nodeID) +
+                           ", Introducing channel error with code " + errorCode + ", ";
     EV << loggedMessage <<endl;
-
-    // TODO: LOG MESSAGE 1 TO OUTPUT FILE
+    writeFile(loggedMessage);
 
     // Intialize Delay with processing time delay
     double delay = packetProcessingTime;
@@ -258,7 +273,6 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
 
     // Apply framing to the Payload and set it
     string framedPayload = frame(payload);
-    msg->setM_Payload(framedPayload.c_str());
 
     // calculate the parity bit and add parity to the message trailer
     int parity = calcParityBit(seq_number, framedPayload);
@@ -267,33 +281,34 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
     // introduce error to Payload
     string logger = "";
     string logger2 = "";
-    int numberSent = processError(errorCode, framedPayload, logger, logger2,
-            delay);
+    int numberSent = processError(errorCode, framedPayload, logger, logger2, delay);
 
     // Log Message 2
 
-    loggedMessage =
-            format(
-                    "At time [{}], Node[{}] sent frame with seq_num=[{}] and payload=[{}] and trailer=[{}],",
-                    currentTime, nodeID, seq_number, framedPayload,
-                    (bitset<8>(parity)).to_string());
+    loggedMessage = "At time " + to_string(currentTime) +
+                    ", Node" + to_string(nodeID) +
+                    " sent frame with seq_num=" + to_string(seq_number) +
+                    " and payload=" + framedPayload +
+                    " and trailer=" + (bitset<8>(parity)).to_string() + ",";
 
     double dup_delay = duplicationDelay;
 
     // In case of duplicates
-    string loggedMessage2 =
-            format(
-                    "At time [{}], Node[{}] sent frame with seq_num=[{}] and payload=[{}] and trailer=[{}],",
-                    (currentTime + dup_delay), nodeID, seq_number,
-                    framedPayload, (bitset<8>(parity)).to_string());
+    string loggedMessage2 = "At time " + to_string(currentTime + dup_delay) +
+                    ", Node" + to_string(nodeID) +
+                    " sent frame with seq_num=" + to_string(seq_number) +
+                    " and payload=" + framedPayload +
+                    " and trailer=" + (bitset<8>(parity)).to_string() + ",";
+
 
     EV << loggedMessage+logger <<endl;
-    // TODO: log message 2 to output file
+    writeFile(loggedMessage+logger);
 
     delay += transmissionDelay;
 
     // set the message type to data (because this is the initialization)
     msg->setM_Type(2);
+    msg->setM_Payload(framedPayload.c_str());
 
     // set the Ack number
     msg->setM_Ack_Num(15); // needs to be properly set
@@ -306,16 +321,28 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
     }
 
     if (numberSent == 2) {
-        // TODO: log message2 2 to output file
         EV << loggedMessage2+logger2 <<endl;
+        writeFile(loggedMessage2+logger2);
         sendDelayed(msg, delay, "out");
-        sendDelayed(msg, (delay + dup_delay), "out");
+
+        // create a new custom message
+        Custom_message_Base *msgDup = new Custom_message_Base("dup");
+        msgDup->setM_Header(seq_number);
+        msgDup->setM_Payload(framedPayload.c_str());
+        msgDup->setM_Trailer(parity);
+        msgDup->setM_Type(2);
+        msgDup->setM_Ack_Num(15);
+        sendDelayed(msgDup, (delay + dup_delay), "out");
     }
 
 }
 
-void handleReceive(Custom_message_Base *msg) {
+void Node::handleReceive(cMessage *msg) {
     Custom_message_Base *mmsg = check_and_cast<Custom_message_Base*>(msg);
+
+    int seq_number = mmsg->getM_Header();
+    if (lastReceived !=seq_number-1)
+        return;
 
     string frame = mmsg->getM_Payload();
     string payload = deframe(frame);
@@ -336,7 +363,7 @@ void handleReceive(Custom_message_Base *msg) {
         AckNack = "ACK";
     }
 
-    mmsg->setM_Ack_Num(mmsg->getM_Header());
+    mmsg->setM_Ack_Num(seq_number);
 
     string AckLoss = "";
 
@@ -349,13 +376,37 @@ void handleReceive(Custom_message_Base *msg) {
     {
         send(mmsg, "out");
         AckLoss = "No";
+        if (mmsg->getM_Type()==1)
+        {
+            lastReceived++;
+            if (lastReceived == windowSize)
+                lastReceived = -1;
+        }
     }
 
 
-    string loggedMessage =
-        format(
-           "At time [{}], Sending [{}] with number [{}] , loss [Yes/No ].",
-           SimTime(), AckNack, AckLoss);
+    string loggedMessage = "At time " + to_string(SimTime().dbl()) +
+                           ", Sending " + AckNack +
+                           " with number " + to_string(seq_number) +
+                           " , loss [" + AckLoss + " ].";
 
     EV << loggedMessage << endl;
+    writeFile(loggedMessage);
 }
+
+void Node::writeFile(string x) {
+    string outputFile = "../src/output.txt";
+
+    // Open the file in append mode
+    ofstream file(outputFile, std::ios::app);
+    if (!file.is_open()) {
+        return;
+    }
+
+    // Write the string x to the file
+    file << x << endl;
+
+    // Close the file
+    file.close();
+}
+

@@ -22,7 +22,6 @@ Define_Module(Coordinator);
 
 void Coordinator::initialize()
 {
-    // TODO - Generated method body
     int nodeId ;
     double startTime;
     readFile(nodeId, startTime);
@@ -39,18 +38,14 @@ void Coordinator::initialize()
 
 void Coordinator::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 void Coordinator::readFile(int &nodeId, double &startTime)
 {
-    string inputFileName = "D:/uni_courses/sem7/networks-1/go-back-N-DLL/project_networks/src/coordinator.txt";
+    string inputFileName = "../src/coordinator.txt";
     std::ifstream file(inputFileName);
     if (!file.is_open())
-    {
-        cout << "Error: Could not open file " << inputFileName << endl;
         return;
-    }
 
     EV << "Reading data from file: " << inputFileName << endl;
 
@@ -58,10 +53,6 @@ void Coordinator::readFile(int &nodeId, double &startTime)
     if (file >> nodeId >> startTime)
     {
         cout << "Successfully read Node ID: " << nodeId << ", Start Time: " << startTime << endl;
-    }
-    else
-    {
-        cout << "Error: File format is incorrect. Expected two space-separated numbers." << endl;
     }
 
     file.close();

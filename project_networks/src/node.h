@@ -37,25 +37,27 @@ class Node : public cSimpleModule
     int windowSize;                      // The maximum number of packets the sender can send without waiting for an acknowledgment
     int currentWindowSize;               // The maximum number of packets the sender can send without waiting for an acknowledgment (HANDLES LAST ITERATION)
     int base;                            // The sequence number of the oldest unacknowledged packet (start of the sender's sliding window)
-    int maxSeqBunch = 0;                 // current sequence range (for example maxSeqBunch=0 means values from i = 0 -> i= windowSize -1)
+    int maxSeqBunch;                 // current sequence range (for example maxSeqBunch=0 means values from i = 0 -> i= windowSize -1)
+    int lastReceived;
 
-    queue<string> queue;                 // Queue to store payloads (messages) that the sender needs to transmit
     vector<pair<string, string>> values; // A vector of <error type, message> pairs to simulate errors in specific packets
     int pointer = 0;                     // Index for iterating through the `values` vector, used for error simulation
     bool isSender = false;               // Boolean flag indicating whether this node is acting as a sender (true) or receiver (false)
 
   protected:
-    virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2);
+    virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2, double &delay);
     virtual int calcParityBit(int seq_number, string payload);
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
-    virtual void handleSend();
-    void GoBackN();
+    virtual void handleSend(string payload, int seq_number, string errorCode);
+    void GoBackN(int maxSeqBunch, int seqN);
     void handleAck(int ackNumber);
     void handleTimeout();
     string frame(string payload);
     string deframe(string frame);
-    void readFile();
+    void readFile(int nodeId);
+    void handleReceive(cMessage *msg);
+    void writeFile(string x);
 };
 
 #endif

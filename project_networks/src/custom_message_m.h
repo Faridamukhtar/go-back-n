@@ -110,4 +110,3 @@ template<> inline Custom_message_Base *fromAnyPtr(any_ptr ptr) { return check_an
 }  // namespace omnetpp
 
 #endif // ifndef __CUSTOM_MESSAGE_M_H
-
