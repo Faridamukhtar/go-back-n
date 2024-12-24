@@ -28,11 +28,11 @@ void Coordinator::initialize()
     cMessage *msg = new cMessage(to_string(startTime).c_str());
     if (nodeId == 0)
     {
-        sendDelayed(msg,startTime ,"out", 0);
+        sendDelayed(msg,SimTime(startTime) ,"out", 0);
     }
     else if (nodeId == 1)
     {
-        sendDelayed(msg,startTime, "out", 1);
+        sendDelayed(msg,SimTime(startTime), "out", 1);
     }
 }
 

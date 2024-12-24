@@ -17,6 +17,8 @@
 #define __PROJECT_NETWORKS_NODE_H_
 
 #include <omnetpp.h>
+#include <queue>
+#include"custom_message_m.h"
 
 using namespace omnetpp;
 using namespace std;
@@ -41,8 +43,9 @@ class Node : public cSimpleModule
     int lastReceived;
 
     vector<pair<string, string>> values; // A vector of <error type, message> pairs to simulate errors in specific packets
-    int pointer = 0;                     // Index for iterating through the `values` vector, used for error simulation
-    bool isSender = false;               // Boolean flag indicating whether this node is acting as a sender (true) or receiver (false)
+    queue<Custom_message_Base *> timeoutQueue; // Queue for all timeout messages
+    int pointer;                     // Index for iterating through the `values` vector, used for error simulation
+    bool isSender;               // Boolean flag indicating whether this node is acting as a sender (true) or receiver (false)
 
   protected:
     virtual int processError(string errorCode, string& framedPayload, string &logger, string& logger2, double &delay);
@@ -58,6 +61,8 @@ class Node : public cSimpleModule
     void readFile(int nodeId);
     void handleReceive(cMessage *msg);
     void writeFile(string x);
+    void cancelAllTimeouts();
+    void cancelTimeoutsUpToSeqNumber(int seqNumber);
 };
 
 #endif

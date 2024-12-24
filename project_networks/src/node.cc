@@ -20,8 +20,6 @@
 #include<string>
 #include<iostream>
 
-#include"custom_message_m.h"
-
 using namespace std;
 
 Define_Module(Node);
@@ -138,11 +136,13 @@ void Node::GoBackN(int maxSeqBunch, int seqN) {
     {
         Custom_message_Base *timerMessage = new Custom_message_Base("timeOut");
         timerMessage->setM_Header(i);
-        timerMessage->setM_Trailer(currentWindowSize + maxSeqBunch);
 
-        scheduleAt(simTime() + timeout, timerMessage);
+        timeoutQueue.push(timerMessage);
+
+        scheduleAt(SimTime(SimTime().dbl() + timeout), timerMessage);
 
         handleSend(values[i + maxSeqBunch].second, i, values[i + maxSeqBunch].first);
+        values[i + maxSeqBunch] = {"0000", values[i + maxSeqBunch].second};
     }
 
 }
@@ -155,14 +155,14 @@ void Node::readFile(int nodeId) {
         inputFileName ="../src/input1.txt";
 
 
-    std::ifstream file(inputFileName);
+    ifstream file(inputFileName);
     if (!file.is_open()) {
         return;
     }
 
-    std::string line;
+    string line;
     string id, description;
-    while (std::getline(file, line)) {
+    while (getline(file, line)) {
         id = line.substr(0, 4);
         description = line.substr(5);
         values.push_back( { id, description });
@@ -191,6 +191,38 @@ void Node::initialize() {
     probabilityOfAckLoss = par("LP").intValue();
     lastReceived = -1;
     maxSeqBunch = 0;
+    isSender = false;
+    pointer = 0;
+}
+
+void Node::cancelAllTimeouts() {
+    while (!timeoutQueue.empty()) {
+        Custom_message_Base* msg = timeoutQueue.front(); // Get the front message
+        timeoutQueue.pop(); // Remove it from the queue
+
+        if (msg->isScheduled()) {
+            cancelEvent(msg); // Cancel the scheduled event
+        }
+
+        delete msg; // Free the memory if the message is no longer needed
+    }
+}
+
+void Node::cancelTimeoutsUpToSeqNumber(int seqNumber) {
+    while (!timeoutQueue.empty()) {
+        Custom_message_Base* msg = timeoutQueue.front(); // Get the front message
+        timeoutQueue.pop(); // Remove it from the queue
+
+        if (msg && msg->getM_Header() <= seqNumber) {
+            // Cancel the event if scheduled and sequence number matches
+            if (msg->isScheduled()) {
+                cancelEvent(msg);
+            }
+            delete msg; // Delete the message
+        } else {
+            break; // all remaining seq numbers will be greater than the threshold sequence number
+        }
+    }
 }
 
 void Node::handleMessage(cMessage *msg) {
@@ -199,13 +231,16 @@ void Node::handleMessage(cMessage *msg) {
 
     // You can access the gate's index to check which gate it arrived at
     int gateIndex = arrivalGate->getIndex();
-
+    cout<<SimTime().dbl();
+    cout<<"AAA";
     // received a message from the coordinator --> sender
-    if (gateIndex == 1 && isSender == false) {
+    if (gateIndex == 1)
+    {
         isSender = true;
         GoBackN(maxSeqBunch, 0);
         return;
     }
+    cout<<"AHAHAHHSSHSH";
 
     Custom_message_Base *mmsg = check_and_cast<Custom_message_Base*>(msg);
 
@@ -213,17 +248,16 @@ void Node::handleMessage(cMessage *msg) {
     if (isSender) {
         if (strcmp(msg->getName(), "timeOut") == 0)
         {
-            if (mmsg->getM_Trailer() > maxSeqBunch and mmsg->getM_Header()>=expectedSeqNumber)
-            {
-                int seqNumber = mmsg->getM_Header();
-                string loggedMessage = "Time out event at time " + to_string(SimTime().dbl()) +
-                                       ", at Node" + to_string(nodeID) +
-                                       " for frame with seq_num=" + to_string(seqNumber) + ", ";
-                EV << loggedMessage <<endl;
-                writeFile(loggedMessage);
+            cancelAllTimeouts();
 
-                GoBackN(maxSeqBunch, expectedSeqNumber);
-            }
+            int seqNumber = mmsg->getM_Header();
+            string loggedMessage = "Time out event at time " + to_string(SimTime().dbl()) +
+                                   ", at Node" + to_string(nodeID) +
+                                   " for frame with seq_num=" + to_string(seqNumber) + ", ";
+            EV << loggedMessage <<endl;
+            writeFile(loggedMessage);
+
+            GoBackN(maxSeqBunch, expectedSeqNumber);
 
             return;
         }
@@ -232,7 +266,9 @@ void Node::handleMessage(cMessage *msg) {
         int currentAck = mmsg->getM_Ack_Num();
         int frameType = mmsg->getM_Type();
 
-        if (currentAck >= expectedSeqNumber and frameType == 1) {
+        if (currentAck >= expectedSeqNumber and frameType == 1)
+        {
+            cancelTimeoutsUpToSeqNumber(currentAck);
             expectedSeqNumber = currentAck + 1;
             if (expectedSeqNumber == currentWindowSize) {
                 maxSeqBunch += currentWindowSize;
@@ -241,8 +277,6 @@ void Node::handleMessage(cMessage *msg) {
 
                 GoBackN(maxSeqBunch, 0);
             }
-        } else {
-            GoBackN(maxSeqBunch, expectedSeqNumber);
         }
     }
     //receiver handling
@@ -317,13 +351,13 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
         return;
 
     if (numberSent == 1) {
-        sendDelayed(msg, delay, "out");
+        sendDelayed(msg, SimTime(delay), "out");
     }
 
     if (numberSent == 2) {
         EV << loggedMessage2+logger2 <<endl;
         writeFile(loggedMessage2+logger2);
-        sendDelayed(msg, delay, "out");
+        sendDelayed(msg, SimTime(delay), "out");
 
         // create a new custom message
         Custom_message_Base *msgDup = new Custom_message_Base("dup");
@@ -332,22 +366,24 @@ void Node::handleSend(string payload, int seq_number, string errorCode) {
         msgDup->setM_Trailer(parity);
         msgDup->setM_Type(2);
         msgDup->setM_Ack_Num(15);
-        sendDelayed(msgDup, (delay + dup_delay), "out");
+        sendDelayed(msgDup, SimTime(delay + dup_delay), "out");
     }
-
 }
 
 void Node::handleReceive(cMessage *msg) {
     Custom_message_Base *mmsg = check_and_cast<Custom_message_Base*>(msg);
 
     int seq_number = mmsg->getM_Header();
+
     if (lastReceived !=seq_number-1)
         return;
 
     string frame = mmsg->getM_Payload();
+
     string payload = deframe(frame);
 
     int parity = mmsg->getM_Trailer();
+
     int par = calcParityBit(mmsg->getM_Header(), frame);
 
     string AckNack = "";
@@ -398,7 +434,7 @@ void Node::writeFile(string x) {
     string outputFile = "../src/output.txt";
 
     // Open the file in append mode
-    ofstream file(outputFile, std::ios::app);
+    ofstream file(outputFile, ios::app);
     if (!file.is_open()) {
         return;
     }
