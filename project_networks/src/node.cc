@@ -385,6 +385,8 @@ void Node::handleReceive(cMessage *msg) {
     string frame = mmsg->getM_Payload();
 
     string payload = deframe(frame);
+    EV<<"Original Payload "<<payload<<endl;
+    writeFile("Original Payload "+payload);
 
     int parity = mmsg->getM_Trailer();
 
