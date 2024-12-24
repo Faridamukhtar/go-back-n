@@ -200,7 +200,7 @@ void Node::initialize() {
 }
 
 void Node::cancelAllTimeouts() {
-    while (!timeoutQueue.empty() and i<windowSize) {
+    while (!timeoutQueue.empty()) {
         Custom_message_Base* msg = timeoutQueue.front(); // Get the front message
         timeoutQueue.pop(); // Remove it from the queue
 
