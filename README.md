@@ -21,8 +21,8 @@ The Go-Back-N protocol is a sliding window mechanism used to ensure reliable dat
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Faridamukhtar/go-back-N-DLL.git
-   cd go-back-N-DLL
+   git clone https://github.com/Faridamukhtar/go-back-n.git
+   cd go-back-n
    ```
 2. Run omnetpp
 3. Build project
