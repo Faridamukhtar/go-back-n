@@ -1,5 +1,5 @@
 
-# Go-Back-N Protocol - Data Link Layer Implementation
+# Go-Back-N Protocol
 
 This repository contains an implementation of the **Go-Back-N Automatic Repeat reQuest (ARQ) Protocol** at the **Data Link Layer** of the OSI model. 
 The Go-Back-N protocol is a sliding window mechanism used to ensure reliable data transmission by handling packet loss, retransmissions, and maintaining proper sequencing.
